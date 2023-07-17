@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\C2CAuthController;
+use App\Http\Controllers\C2CCrawlController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
+Route::post('/c2clogin', [C2CAuthController::class, 'login'])->name('c2c.login');
+Route::post('/c2ccrawl', [C2CCrawlController::class, 'crawl'])->name('c2c.crawl');
