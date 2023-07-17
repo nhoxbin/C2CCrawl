@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index']);
 Route::post('/c2clogin', [C2CAuthController::class, 'login'])->name('c2c.login');
 Route::post('/c2ccrawl', [C2CCrawlController::class, 'crawl'])->name('c2c.crawl');
+Route::post('/c2cparsePhones', [C2CCrawlController::class, 'parsePhones'])->name('c2c.parsePhones');
