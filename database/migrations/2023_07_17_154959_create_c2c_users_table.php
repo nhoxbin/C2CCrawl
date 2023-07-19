@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('c2c_users', function (Blueprint $table) {
             $table->id();
-            $table->string('phone');
+            $table->foreignId('users')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('token');
             $table->timestamps();
         });
