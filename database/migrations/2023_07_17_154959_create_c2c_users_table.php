@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('c2c_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('token');
+            $table->foreignIdFor(User::class)->cascadeOnUpdate()->cascadeOnDelete();
+            $table->text('info');
             $table->timestamps();
         });
     }

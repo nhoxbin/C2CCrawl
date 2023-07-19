@@ -10,4 +10,10 @@ class C2CUser extends Model
     use HasFactory;
 
     public $table = 'c2c_users';
+
+    protected $fillable = ['info'];
+
+    protected $casts = [
+        'info' => 'json',
+    ];
 }

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Ixudra\Curl\Facades\Curl;
-use Log;
+
 class C2CCrawlController extends Controller
 {
     function crawl(Request $request) {
@@ -16,11 +17,11 @@ class C2CCrawlController extends Controller
                 'User-Agent' => 'okhttp/3.12.12',
                 'Content-Type' => 'application/json;charset=UTF-8',
                 'Host' => 'kpi.mobifone5.vn:8088',
-                'token' => 'eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTA3NzU4ODksInN1YiI6IjAzODM1MzQxNzMiLCJjcmVhdGVkIjoxNjg5MzA0NjYwOTAxfQ.K2KiSqwBHmBSmpdaPeIapWbZGYzZIFaAgjo5NdaZrCUfFuyIAdl8kgvGBXwx6cZFZYjSFDfBN8g1vkUYgu5UFw',
+                'token' => $request->user()->c2cUser->info['pw'],
             ])->withData($request->phone)->post();
 
         $response = json_decode($curl);
-        return response()->json(['success' => false, 'msg' => $response->msg, 'data' => $response->data]);
+        return response()->json(['success' => ($response->code == 200 ? true : false), 'msg' => $response->msg, 'data' => $response->data]);
     }
 
     function parsePhones(Request $request) {
