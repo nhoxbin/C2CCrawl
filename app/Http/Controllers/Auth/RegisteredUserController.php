@@ -34,9 +34,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
             'phone' => 'required|string|min:10|max:12|unique:'.User::class,
-            // 'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -45,10 +43,7 @@ class RegisteredUserController extends Controller
                 'User-Agent' => 'okhttp/3.12.12',
                 'Host' => 'kpi.mobifone5.vn:8088'
             ])->withData([
-                'account' => $request->phone,
-                'appVersion' => "ios - 2.10.3",
-                'deviceName' => "Model: iPhone X - DeviceId: iPhone10,6 - DeviceName: iPhone",
-                'systemName' => "iOS - 16.4.1"
+                'account' => $request->phone
             ])->asJson(true)->post();
 
         if ($curl['code'] != 200) {
@@ -58,12 +53,13 @@ class RegisteredUserController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $curl['data']['fullName'],
+            'email' => $curl['data']['email'],
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
         $user->c2cuser()->create([
-            'info' => $curl['data']
+            'pw' => $curl['data']['pw'],
         ]);
 
         event(new Registered($user));

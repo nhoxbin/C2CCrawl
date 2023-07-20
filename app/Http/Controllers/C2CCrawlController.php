@@ -17,7 +17,7 @@ class C2CCrawlController extends Controller
                 'User-Agent' => 'okhttp/3.12.12',
                 'Content-Type' => 'application/json;charset=UTF-8',
                 'Host' => 'kpi.mobifone5.vn:8088',
-                'token' => $request->user()->c2cUser->info['pw'],
+                'token' => $request->user()->c2cUser->pw,
             ])->withData($request->phone)->post();
 
         $response = json_decode($curl);

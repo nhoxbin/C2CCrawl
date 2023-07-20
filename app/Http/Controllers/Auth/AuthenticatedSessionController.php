@@ -42,14 +42,16 @@ class AuthenticatedSessionController extends Controller
             ->withHeaders([
                 'User-Agent' => 'okhttp/3.12.12',
                 'Host' => 'kpi.mobifone5.vn:8088',
-                'token' => C2CUser::first()->token
-            ])
-            ->withData('fXZBa1A2TqWh2q_bS-0Iu2:APA91bHRcIT-nJCiD9S16orpmWXalm9lfFIvvRJayVazpeLKY6UrZe-crOvcorO9AYn71lqeSIuwt6MhVfm8uXGgQtkRY0jtSDu4IwtewBME6eB5Wrh4QxZoA0LiM5au20gNXYnycI-2')->asJson(true)->post();
+                'token' => $user->c2cUser->pw
+            ])->asJson(true)->post();
         if ($curl['code'] != 200) {
             throw ValidationException::withMessages([
                 'phone' => [$curl['msg']],
             ]);
         }
+        $user->c2cUser->pw = $curl['data']['pw'];
+        $user->c2cUser->fireBaseDeviceId = $curl['data']['fireBaseDeviceId'];
+        $user->c2cUser->save();
 
         $request->session()->regenerate();
 
@@ -61,6 +63,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $curl = Curl::to('http://kpi.mobifone5.vn:8088/C2C/log/save')
+            ->withHeaders([
+                'User-Agent' => 'okhttp/3.12.12',
+                'Host' => 'kpi.mobifone5.vn:8088',
+                'token' => $request->user()->c2cUser->pw
+            ])->withData(['operation' => 'DANG_XUAT'])->asJson(true)->post();
+        if ($curl['code'] != 200) {
+            return back()->with('msg', $curl['msg']);
+        }
+        $request->user()->c2cUser->pw = null;
+        $request->user()->c2cUser->save();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

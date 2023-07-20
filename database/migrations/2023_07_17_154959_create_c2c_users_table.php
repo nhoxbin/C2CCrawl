@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::create('c2c_users', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->cascadeOnUpdate()->cascadeOnDelete();
-            $table->text('info');
+            $table->text('pw')->nullable();
+            $table->text('fireBaseDeviceId')->nullable();
             $table->timestamps();
         });
     }
