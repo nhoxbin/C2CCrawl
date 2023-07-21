@@ -12,11 +12,19 @@ defineProps<{
     data?: any
 }>();
 
+type Package = {
+    phone?: string,
+    code?: number,
+    reg?: string,
+    exp?: string,
+    exp_date?: string
+};
+
 const form = useForm({
     phone: '',
 });
 let phones: string = '';
-const phone_code: Array<Object> = reactive([]);
+const phone_code: Array<Package> = reactive([]);
 
 const submit = () => {
     phone_code.length = 0;
