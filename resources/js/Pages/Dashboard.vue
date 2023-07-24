@@ -37,13 +37,15 @@ const submit = () => {
                 phone: val
             }).then(function({data}: any) {
                 if (data.success) {
-                    phone_code.push({
-                        'phone': val,
-                        'code': data.data[0].PCK_CODE,
-                        'exp': data.data[0].EXPIRE_DATETIME,
-                        'exp_date': data.data[0].EXPIRE_DATE,
-                        'reg': data.data[0].REG_DATETIME,
-                    });
+                    if (typeof data.data[0] == 'object') {
+                        phone_code.push({
+                            'phone': val,
+                            'code': data.data[0].PCK_CODE,
+                            'exp': data.data[0].EXPIRE_DATETIME,
+                            'exp_date': data.data[0].EXPIRE_DATE,
+                            'reg': data.data[0].REG_DATETIME,
+                        });
+                    }
                 }
             });
         }
