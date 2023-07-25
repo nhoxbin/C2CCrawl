@@ -43,7 +43,10 @@ class RegisteredUserController extends Controller
                 'User-Agent' => 'okhttp/3.12.12',
                 'Host' => 'kpi.mobifone5.vn:8088'
             ])->withData([
-                'account' => $request->phone
+                'account' => $request->phone,
+                'appVersion' => 'ios - 2.10.3',
+                'deviceName' => 'Model: iPhone X - DeviceId: iPhone10,6 - DeviceName: iPhone',
+                'systemName' => 'iOS - 16.4.1',
             ])->asJson(true)->post();
 
         if ($curl['code'] != 200) {
