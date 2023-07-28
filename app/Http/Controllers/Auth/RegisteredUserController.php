@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\C2CHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -14,7 +15,6 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
-use Ixudra\Curl\Facades\Curl;
 
 class RegisteredUserController extends Controller
 {
@@ -38,16 +38,8 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $curl = Curl::to('http://kpi.mobifone5.vn:8088/C2C/loginByMobilev2')
-            ->withHeaders([
-                'User-Agent' => 'okhttp/3.12.12',
-                'Host' => 'kpi.mobifone5.vn:8088'
-            ])->withData([
-                'account' => $request->phone,
-                'appVersion' => 'ios - 2.10.3',
-                'deviceName' => 'Model: iPhone X - DeviceId: iPhone10,6 - DeviceName: iPhone',
-                'systemName' => 'iOS - 16.4.1',
-            ])->asJson(true)->post();
+        $c2cHelper = new C2CHelper;
+        $curl = $c2cHelper->login($request->phone);
 
         if ($curl['code'] != 200) {
             throw ValidationException::withMessages([

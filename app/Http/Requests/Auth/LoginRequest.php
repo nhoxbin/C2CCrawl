@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Helpers\C2CHelper;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,25 @@ class LoginRequest extends FormRequest
                 'phone' => trans('auth.failed'),
             ]);
         }
+
+        $user = Auth::user();
+        $c2cHelper = new C2CHelper;
+        $curl = $c2cHelper->updateToken($user->c2cUser->pw);
+        if ($curl['code'] != 200) {
+            if ($curl['code'] == 500) {
+                $curl = $c2cHelper->login($user->phone);
+            }
+        }
+        if ($curl['code'] != 200) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'phone' => $curl['msg'],
+            ]);
+        }
+
+        $user->c2cUser->pw = $curl['data']['pw'];
+        // $user->c2cUser->fireBaseDeviceId = $curl['data']['fireBaseDeviceId'];
+        $user->c2cUser->save();
 
         RateLimiter::clear($this->throttleKey());
     }

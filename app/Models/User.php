@@ -44,7 +44,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    function c2cuser() {
+    function c2cUser() {
         return $this->hasOne(C2CUser::class);
     }
 }
