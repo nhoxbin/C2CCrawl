@@ -3,8 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import axios from 'axios';
 import { reactive } from 'vue';
-import { Ref } from 'vue';
-import { ref } from 'vue';
 
 defineProps<{
     success?: boolean,
