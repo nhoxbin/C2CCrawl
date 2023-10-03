@@ -10,14 +10,16 @@ defineProps<{
     data?: any
 }>();
 
+type Data = {
+    PCK_CODE: string,
+    REG_DATETIME: string,
+    EXPIRE_DATETIME: string,
+    EXPIRE_DATE: string
+};
+
 type Package = {
-    phone?: string,
-    data?: {
-        PCK_CODE?: string,
-        REG_DATETIME?: string,
-        EXPIRE_DATETIME?: string,
-        EXPIRE_DATE?: string
-    }
+    phone: string,
+    data: Array<Data>
 };
 
 const form = useForm({
@@ -82,7 +84,7 @@ const submit = () => {
                         <div v-for="(data, index) in phone_data" :key="index">
                             <label :for="data.phone">{{ data.phone }}</label>
                             <div v-for="(row, i) in data.data" :key="i">
-                                <div v-if="i == 0 || i == 3">
+                                <div v-if="(i == 0 || i == 3) && row && row.hasOwnProperty('PCK_CODE')">
                                     {{ row.PCK_CODE }} ({{ row.REG_DATETIME }} - {{ row.EXPIRE_DATETIME }})
                                 </div>
                                 <label v-else :for="row.PCK_CODE">{{ row.PCK_CODE }}</label>
