@@ -78,12 +78,9 @@ const submit = () => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <div v-for="(data, index) in phone_data" :key="index">
-                            <label :for="data.phone">{{ data.phone }}</label>
-                            <div v-for="(row, i) in data.data" :key="i">
-                                <div v-if="i == 0 || i == 3">
-                                    {{ row.PCK_CODE }} ({{ row.REG_DATETIME }} - {{ row.EXPIRE_DATETIME }})
-                                </div>
-                                <label v-else :for="row.PCK_CODE">{{ row.PCK_CODE }}</label>
+                            <label :for="data.phone" class="float-left">{{ data.phone }}:&nbsp;</label>
+                            <div v-for="(row, i) in data.data" :key="i" class="float-left">
+                                {{ (i == 0 || i == 3) ? (row.PCK_CODE + ` (${row.REG_DATETIME} - ${row.EXPIRE_DATETIME}),`) : row.PCK_CODE + ',' }}
                             </div>
                             <br />
                         </div>
