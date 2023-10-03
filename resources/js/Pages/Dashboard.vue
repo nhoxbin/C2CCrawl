@@ -38,15 +38,11 @@ const submit = () => {
             form.phone = val;
             axios.post(route('c2c.crawl'), form).then(function({data}: any) {
                 if (data.success && data.data.length) {
-                    // data.data['phone'] = val;
                     phone_data.push({
                         'phone': val,
                         'data': data.data,
                     });
-                    /*  */
-                }/*  else {
-                    phone_code.push();
-                } */
+                }
             });
         }
     });
@@ -84,7 +80,7 @@ const submit = () => {
                         <div v-for="(data, index) in phone_data" :key="index">
                             <label :for="data.phone">{{ data.phone }}</label>
                             <div v-for="(row, i) in data.data" :key="i">
-                                <div v-if="(i == 0 || i == 3) && row && row.hasOwnProperty('PCK_CODE')">
+                                <div v-if="i == 0 || i == 3">
                                     {{ row.PCK_CODE }} ({{ row.REG_DATETIME }} - {{ row.EXPIRE_DATETIME }})
                                 </div>
                                 <label v-else :for="row.PCK_CODE">{{ row.PCK_CODE }}</label>
