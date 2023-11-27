@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class C2CCrawlController extends Controller
 {
     function crawl(Request $request) {
-        if (now() >= Carbon::createFromFormat('d/m/Y', '03/11/2023')) {
+        if (now() >= Carbon::createFromFormat('d/m/Y', '04/12/2023')) {
             return response()->json(['success' => false, 'msg' => 'Không thể lấy dữ liệu', 'data' => []]);
         }
         $c2cHelper = new C2CHelper;
